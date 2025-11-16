@@ -1,0 +1,48 @@
+# ============= Core Framework =============
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# ============= File Handling =============
+aiofiles==23.2.1
+Pillow==10.2.0
+
+# ============= Database =============
+# SQLite is built-in to Python, no extra package needed
+
+# ============= PHƯƠNG ÁN 1: On-Premise Models =============
+# Uncomment and install based on your chosen model:
+
+# For IDM-VTON
+# torch>=2.0.0
+# torchvision>=0.15.0
+# diffusers>=0.25.0
+# transformers>=4.36.0
+# accelerate>=0.25.0
+
+# For OOTDiffusion
+# torch>=2.0.0
+# torchvision>=0.15.0
+# diffusers>=0.25.0
+# transformers>=4.36.0
+
+# Common ML dependencies (if using on-premise models)
+# opencv-python>=4.8.0
+# numpy>=1.24.0
+# scipy>=1.11.0
+
+# ============= PHƯƠNG ÁN 2: External APIs =============
+requests>=2.31.0
+
+# Replicate API
+replicate>=0.22.0
+
+# Fal.ai API
+# fal-client>=0.3.0
+
+# HeyBeauty API (uses requests only, no extra package needed)
+
+# ============= Optional: Enhanced Features =============
+# python-dotenv>=1.0.0  # For .env file support
