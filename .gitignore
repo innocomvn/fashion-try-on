@@ -52,6 +52,14 @@ fashion_tryon.db
 *.log
 logs/
 
+# Ngrok
+.ngrok*
+ngrok.yml
+
+# Process IDs
+.pids/
+*.pid
+
 # OS
 .DS_Store
 Thumbs.db
