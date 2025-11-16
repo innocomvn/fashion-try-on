@@ -49,6 +49,12 @@ app.add_middleware(
 app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
 app.mount("/results", StaticFiles(directory=settings.RESULT_DIR), name="results")
 
+# Mount frontend
+import os
+frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+if os.path.exists(frontend_dir):
+    app.mount("/static", StaticFiles(directory=frontend_dir), name="frontend")
+
 
 # ============= Background Task Processing =============
 
@@ -128,6 +134,19 @@ async def health_check():
         on_premise_available=settings.USE_ON_PREMISE,
         external_api_available=settings.USE_EXTERNAL_API
     )
+
+
+@app.get("/app")
+async def serve_frontend():
+    """
+    Serve frontend application
+    """
+    from fastapi.responses import FileResponse
+    frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "index.html")
+    if os.path.exists(frontend_path):
+        return FileResponse(frontend_path)
+    else:
+        raise HTTPException(status_code=404, detail="Frontend not found")
 
 
 @app.post("/api/v1/tryon", response_model=TryOnResponse)

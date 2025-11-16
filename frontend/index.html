@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Try-On - AI Virtual Try-On</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="icon">👗</span>
+                    Fashion Try-On
+                </h1>
+                <p class="subtitle">AI-powered Virtual Try-On - Test với 2 phương án</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="card">
+                    <h2 class="card-title">📸 Upload Ảnh</h2>
+
+                    <div class="upload-grid">
+                        <!-- Model Image Upload -->
+                        <div class="upload-box">
+                            <h3>Ảnh Người Mẫu</h3>
+                            <div class="upload-area" id="modelUploadArea">
+                                <input type="file" id="modelImage" accept="image/*" hidden>
+                                <label for="modelImage" class="upload-label">
+                                    <div class="upload-icon">👤</div>
+                                    <div class="upload-text">
+                                        <span class="upload-main">Click hoặc kéo thả ảnh</span>
+                                        <span class="upload-sub">JPG, PNG (Max 10MB)</span>
+                                    </div>
+                                </label>
+                                <div class="image-preview" id="modelPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Garment Image Upload -->
+                        <div class="upload-box">
+                            <h3>Ảnh Quần Áo</h3>
+                            <div class="upload-area" id="garmentUploadArea">
+                                <input type="file" id="garmentImage" accept="image/*" hidden>
+                                <label for="garmentImage" class="upload-label">
+                                    <div class="upload-icon">👔</div>
+                                    <div class="upload-text">
+                                        <span class="upload-main">Click hoặc kéo thả ảnh</span>
+                                        <span class="upload-sub">JPG, PNG (Max 10MB)</span>
+                                    </div>
+                                </label>
+                                <div class="image-preview" id="garmentPreview"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section class="settings-section">
+                <div class="card">
+                    <h2 class="card-title">⚙️ Cấu Hình</h2>
+
+                    <!-- Provider Selection -->
+                    <div class="form-group">
+                        <label class="form-label">Chọn Phương Án</label>
+                        <div class="provider-grid">
+                            <div class="provider-card" data-provider="on_premise">
+                                <input type="radio" name="provider" value="on_premise" id="provider-onpremise">
+                                <label for="provider-onpremise">
+                                    <div class="provider-icon">🖥️</div>
+                                    <div class="provider-name">On-Premise</div>
+                                    <div class="provider-desc">Local Model</div>
+                                    <div class="provider-badge">Phương án 1</div>
+                                </label>
+                            </div>
+
+                            <div class="provider-card" data-provider="replicate">
+                                <input type="radio" name="provider" value="replicate" id="provider-replicate" checked>
+                                <label for="provider-replicate">
+                                    <div class="provider-icon">☁️</div>
+                                    <div class="provider-name">Replicate</div>
+                                    <div class="provider-desc">Cloud API</div>
+                                    <div class="provider-badge recommended">Khuyến nghị</div>
+                                </label>
+                            </div>
+
+                            <div class="provider-card" data-provider="fal">
+                                <input type="radio" name="provider" value="fal" id="provider-fal">
+                                <label for="provider-fal">
+                                    <div class="provider-icon">⚡</div>
+                                    <div class="provider-name">Fal.ai</div>
+                                    <div class="provider-desc">Fast API</div>
+                                    <div class="provider-badge">Phương án 2</div>
+                                </label>
+                            </div>
+
+                            <div class="provider-card" data-provider="heybeauty">
+                                <input type="radio" name="provider" value="heybeauty" id="provider-heybeauty">
+                                <label for="provider-heybeauty">
+                                    <div class="provider-icon">💄</div>
+                                    <div class="provider-name">HeyBeauty</div>
+                                    <div class="provider-desc">Pro API</div>
+                                    <div class="provider-badge">Phương án 2</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings -->
+                    <div class="advanced-settings">
+                        <details>
+                            <summary>Cài đặt nâng cao</summary>
+                            <div class="advanced-content">
+                                <div class="form-group">
+                                    <label class="form-label">Loại Quần Áo</label>
+                                    <select id="category" class="form-select">
+                                        <option value="upperbody">Áo (Upperbody)</option>
+                                        <option value="lowerbody">Quần (Lowerbody)</option>
+                                        <option value="dress">Đầm (Dress)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Denoising Steps: <span id="denoiseValue">30</span>
+                                    </label>
+                                    <input type="range" id="denoiseSteps" min="10" max="50" value="30" class="form-range">
+                                    <small>Càng cao càng chi tiết (10-50)</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Random Seed</label>
+                                    <input type="number" id="seed" value="42" class="form-input">
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button id="tryOnBtn" class="btn-primary" disabled>
+                        <span class="btn-icon">✨</span>
+                        <span class="btn-text">Bắt Đầu Thử Đồ</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section" id="progressSection" style="display: none;">
+                <div class="card">
+                    <h2 class="card-title">⏳ Đang Xử Lý...</h2>
+
+                    <div class="progress-info">
+                        <div class="progress-status">
+                            <span class="status-label">Trạng thái:</span>
+                            <span class="status-value" id="statusText">Đang khởi tạo...</span>
+                        </div>
+                        <div class="progress-time">
+                            <span class="time-label">Task ID:</span>
+                            <span class="time-value" id="taskId">-</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-percentage" id="progressPercentage">0%</div>
+                    </div>
+
+                    <div class="progress-details" id="progressDetails"></div>
+                </div>
+            </section>
+
+            <!-- Result Section -->
+            <section class="result-section" id="resultSection" style="display: none;">
+                <div class="card">
+                    <h2 class="card-title">✨ Kết Quả</h2>
+
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <h3>Ảnh Gốc</h3>
+                            <img id="resultOriginal" alt="Original">
+                        </div>
+                        <div class="result-item">
+                            <h3>Quần Áo</h3>
+                            <img id="resultGarment" alt="Garment">
+                        </div>
+                        <div class="result-item result-main">
+                            <h3>🎉 Kết Quả Thử Đồ</h3>
+                            <img id="resultImage" alt="Result">
+                            <div class="result-actions">
+                                <button id="downloadBtn" class="btn-secondary">
+                                    <span>📥 Tải Xuống</span>
+                                </button>
+                                <button id="newTryBtn" class="btn-secondary">
+                                    <span>🔄 Thử Lại</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Thời gian xử lý:</span>
+                            <span class="stat-value" id="processingTime">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Provider:</span>
+                            <span class="stat-value" id="usedProvider">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                Made with ❤️ using FastAPI + AI
+                |
+                <a href="http://localhost:8000/docs" target="_blank">API Docs</a>
+                |
+                <a href="https://github.com/innocomvn/fashion-try-on" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
